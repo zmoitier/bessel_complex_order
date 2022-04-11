@@ -1,0 +1,467 @@
+% arara: clean: { extensions: [ aux, bbl, blg, fdb_latexmk, fls, log, out, synctex.gz, toc ]}
+
+\documentclass[12pt,a4paper]{article}
+
+
+%== \Usepackages ==========================================
+%-- Standard and geometry ---------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\graphicspath{{../img/}}
+
+%-- Links and drawing -------------------------------------
+\usepackage[colorlinks]{hyperref}
+\usepackage{tikz}
+
+%-- Math --------------------------------------------------
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{mathtools,mathrsfs}
+\usepackage[capitalize,nameinlink]{cleveref}
+\numberwithin{equation}{section}
+\allowdisplaybreaks{}
+\raggedbottom{}
+
+%-- Draft utilities ---------------------------------------
+% \usepackage[right]{showlabels}
+% \usepackage[mathlines]{lineno}
+% \linenumbers%\modulolinenumbers[5]
+
+
+%== Colors ================================================
+%-- \definecolor ------------------------------------------
+\definecolor{coGB}{HTML}{1F77B4}
+\definecolor{coWG}{HTML}{2CA02C}
+\definecolor{coAR}{HTML}{D62728}
+
+\newcommand{\Rd}{\color{coAR}}
+\newcommand{\Bu}{\color{coGB}}
+\newcommand{\Gr}{\color{coWG}}
+\newcommand{\Bk}{\color{black}}
+
+%--\hypersetup -------------------------------------------
+\hypersetup{
+    colorlinks = True,
+    linkcolor  = coAR,
+    citecolor  = coWG,
+    urlcolor   = coGB,
+}
+
+
+%== Math ==================================================
+%-- \mathbb -----------------------------------------------
+\newcommand{\bbC}{\mathbb{C}}
+\newcommand{\bbN}{\mathbb{N}}
+\newcommand{\bbR}{\mathbb{R}}
+\newcommand{\bbS}{\mathbb{S}}
+\newcommand{\bbZ}{\mathbb{Z}}
+
+%-- \mathscr ----------------------------------------------
+\newcommand{\scrC}{\mathscr{C}}
+
+%-- \mathrm -----------------------------------------------
+\newcommand{\rmL}{\mathrm{L}}
+\newcommand{\rmH}{\mathrm{H}}
+
+%-- Constants ---------------------------------------------
+\newcommand{\ex}{\mathsf{e}}
+\newcommand{\im}{\mathsf{i}\mkern1mu}
+\newcommand{\jc}{\mathsf{j}\mkern1mu}
+
+%-- Functions ---------------------------------------------
+\DeclareMathOperator{\Ai}{\mathsf{Ai}}
+\DeclareMathOperator{\Bi}{\mathsf{Bi}}
+
+\DeclareMathOperator{\bJ}{\mathsf{J}}
+\DeclareMathOperator{\bY}{\mathsf{Y}}
+\newcommand{\hO}{\mathop{}\!\mathsf{H}^{(1)}}
+\newcommand{\hT}{\mathop{}\!\mathsf{H}^{(2)}}
+
+%-- Keywords ----------------------------------------------
+\newcommand{\loc}{\mathrm{loc}}
+\newcommand{\comp}{\mathrm{comp}}
+
+%-- Operators ---------------------------------------------
+\newcommand{\di}[1]{\mathop{}\!\mathrm{d}#1}
+\DeclareMathOperator{\OO}{\mathcal{O}}
+\DeclareMathOperator{\oo}{\mathcal{\scriptstyle{} O}}
+\DeclareMathOperator{\Div}{div}
+
+%-- Symbols -----------------------------------------------
+\newcommand{\abs}[1]{\left\lvert#1\right\rvert}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\plr}[1]{\left(#1\right)}
+\newcommand{\clr}[1]{\left[#1\right]}
+
+\newcommand{\restr}[2]{\left. #1\right\rvert_{#2}}
+
+\newcommand{\setst}[2]{\left\lbrace#1\ \middle\vert\ #2\right\rbrace}
+\newcommand{\setwt}[2]{\left\lbrace#1\ {:}\ #2\right\rbrace}
+
+%-- Vectors -----------------------------------------------
+\newcommand{\vect}[1]{\boldsymbol{#1}}
+
+%-- Specials ----------------------------------------------
+\newcommand{\eps}{\varepsilon}
+
+
+%== Environment ===========================================
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{notation}[definition]{Notation}
+\newtheorem{assumption}[definition]{Assumption}
+
+\theoremstyle{plain}
+\newtheorem{lemma}[definition]{Lemma}
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{corollary}[definition]{Corollary}
+
+\theoremstyle{remark}
+\newtheorem{remark}[definition]{Remark}
+\newtheorem{example}[definition]{Example}
+
+
+%== Title =================================================
+\title{A Matlab toolbox for the computation of Bessel
+functions with large complex order}
+
+\author{
+    Zo{\"\i}s \textsc{Moitier}\\
+    IRMAR, University of Rennes 1
+}
+
+\date{
+    April-June 2016\\
+    \bigskip\small
+    \textbf{Document last modification:} \today
+}
+
+
+%== Document ==============================================
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+    We code a Matlab toolbox to compute the Bessel and Hankel functions with large complex order.
+    First, we will show which formulas we use, then how to use the toolbox, and some relative errors with Mathematica.
+\end{abstract}
+
+\tableofcontents
+
+%============================
+\section{Formulas use}
+%============================
+
+%----------------------------
+\subsection{Airy type asymptotic expansions}
+%----------------------------
+
+We want to compute the Bessel function of the first kind \( \bJ_\nu(z) \), the Bessel function of the second kind \( \bY_\nu(z) \), the Hankel function of the first kind \( \hO_\nu(z) \), and the Hankel function of the second kind \( \hT_\nu(z) \), for \( \nu \) a large complex number and \( z \) a complex number.
+Those functions are solutions of this differential equation:
+\[
+    z^2 w''(z) + z w'(z) + (z^2-\nu^2) w(z) = 0.
+\]
+
+If \( \nu \) is a real and \( z \) is a complex, Matlab already has functions for this (\texttt{besselj}, \texttt{bessely} and \texttt{besselh}) so, in this case, we use the Matlab functions, but they don't work with complex number \( \nu \).
+For complex \( \nu \), we will use Airy type asymptotic expansion to compute \( \bJ \), \( \bY \), \( \hO \) and \( \hT \).
+
+We start with the formulas find in~\cite{Olv97}, which are:
+\begin{subequations}\label{expansion}
+    \begin{align}
+        \bJ_\nu(\nu y)
+         & = \plr{\frac{4 \zeta}{1-y^2}}^{1/4} \plr{
+            \frac{\Ai\plr{\nu^{2/3} \zeta}}{\nu^{1/3}} A_\nu(\zeta)
+            + \frac{\Ai'\plr{\nu^{2/3} \zeta}}{\nu^{5/3}} B_\nu(\zeta)
+        }
+        \\[1ex]
+        \bY_\nu(\nu y)
+         & = -\plr{\frac{4 \zeta}{1-y^2}}^{1/4} \plr{
+            \frac{\Bi\plr{\nu^{2/3} \zeta}}{\nu^{1/3}} A_\nu(\zeta)
+            + \frac{\Bi'\plr{\nu^{2/3} \zeta}}{\nu^{5/3}} B_\nu(\zeta)
+        }
+        \\[1ex]
+        \hO_\nu(\nu y)
+         & = 2 \ex^{-\im \pi/3} \plr{\frac{4 \zeta}{1-y^2}}^{1/4} \plr{
+            \frac{\Ai\plr{\jc \nu^{2/3} \zeta}}{\nu^{1/3}} A_\nu(\zeta)
+            + \frac{\jc \Ai'\plr{\jc \nu^{2/3} \zeta}}{\nu^{5/3}} B_\nu(\zeta)
+        }                                                               \\[1ex]
+        \hT_\nu(\nu y)
+         & = 2 \ex^{\im \pi/3} \plr{\frac{4 \zeta}{1-y^2}}^{1/4} \plr{
+            \frac{\Ai\plr{\overline{\jc} \nu^{2/3} \zeta}}{\nu^{1/3}} A_\nu(\zeta)
+            + \frac{\overline{\jc} \Ai'\plr{\overline{\jc} \nu^{2/3} \zeta}}{\nu^{5/3}} B_\nu(\zeta)
+        }
+    \end{align}
+\end{subequations}
+where \( \nu \in \bbC \), \( y \in \bbC^* \), \( \jc = \ex^{2 \im \pi /3} \) and \( \zeta \) is defined by
+\[
+    \zeta = \begin{dcases}
+        \plr{\frac{3}{2}}^{2/3} \plr{
+            \log\plr{\frac{1+\sqrt{1-y^2}}{y}} -\sqrt{1-y^2}
+        }^{2/3}
+         & \text{if } \abs{y} \leq 1
+        \\[1ex]
+        -\plr{\frac{3}{2}}^{2/3} \plr{
+            \sqrt{y^2-1} - \arccos\plr{\frac{1}{y}}
+        }^{2/3}
+         & \text{if } |y| > 1
+    \end{dcases}
+\]
+where we use the principal value for the logarithm and the power functions.
+To compute \( A_\nu(\zeta) \) and \( B_\nu(\zeta) \), we use the following asymptotic expansions for \( \abs{\nu} \rightarrow +\infty \), uniformly with respect to \( y \),
+\begin{equation}\label{AaBb}
+    A_\nu(\zeta) \sim \sum_{k = 0}^{+\infty} \frac{a_k(\zeta)}{\nu^{2 k}}
+    \quad \text{and} \quad
+    B_\nu(\zeta) \sim \sum_{k = 0}^{+\infty} \frac{b_k(\zeta)}{\nu^{2 k}}.
+\end{equation}
+Where the sequences \( \plr{a_k(\zeta)}_{k \in \bbN} \) and \( \plr{b_k(\zeta)}_{k \in \bbN} \), are defined as
+\begin{subequations}\label{abk}
+    \begin{align}
+        a_k(\zeta)
+         & = \sum_{s=0}^{2 k} \mu_s \zeta^{-3 s/2} u_{2 k-s}\plr{\plr{1-y^2}^{-1/2}},
+        \\
+        b_k(\zeta)
+         & = -\zeta^{1/2} \sum_{s=0}^{2 k+1} \lambda_s \zeta^{-3 s/2} u_{2 k-s+1}\plr{\plr{1-y^2}^{-1/2}}.
+    \end{align}
+\end{subequations}
+The sequences \( \plr{\lambda_s}_{s \in \bbN} \) et \( \plr{\mu_s}_{s \in \bbN} \) are defined by
+\[
+    \lambda_s = \frac{\Gamma(3 s+\frac{1}{2})}{9^s \sqrt{\pi} \Gamma(2 s +1)}
+    \quad \text{and} \quad
+    \mu_s = -\frac{2 \Gamma(3 s+\frac{3}{2})}{9^s \sqrt{\pi} (6 s-1) \Gamma(2 s +1)}
+\]
+and the quantities \( \plr{u_k}_{k \in \bbN} \) are the Debye polynomial sequences defined by induction by
+\begin{align*}
+    u_0(t)
+     & = 1
+    \\
+    u_{k+1}(t)
+     & = \frac{1}{2} t^2 (1-t^2) u'_{k}(t) + \frac{1}{8} \int_{0}^{t} \plr{1-5 x^2} \, u_k(x) \di{x}
+\end{align*}
+with \( t \in \bbC \).
+
+%----------------------------
+\subsection{Far from the turning point}
+%----------------------------
+
+Practically, the sequences \( \plr{\lambda_s}_{s \in \bbN} \) et \( \plr{\mu_s}_{s \in \bbN} \) are computed by induction from \( \lambda_0 = 1 \) through the relations
+\[
+    \mu_s = -\frac{6 s +1}{6 s-1} \lambda_s
+    \quad \text{and} \quad
+    \lambda_{s+1} = \frac{(6 s+1) (6 s+5)}{48 (s+1)} \lambda_s.
+\]
+The sums \cref{AaBb} converge rapidly, if \( y \) is not too close of 1, so we can only take the first three terms and have a very good accuracy.
+If \( y \sim 1 \), the sums \cref{AaBb} converge very slowly, and we need another method to compute \( A_\nu(\zeta) \) and \( B_\nu(\zeta) \).
+
+%----------------------------
+\subsection{Near the turning point}
+%----------------------------
+
+In this case we can't use the exact formulas \cref{AaBb} because of the too slow decay of the sum's coefficients.
+Instead, we develop in Taylor series the coefficients \( \plr{a_k(\zeta)}_{k \in \bbN} \) and \( \plr{b_k(\zeta)}_{k \in \bbN} \) as follows
+\[
+    a_k(\zeta) = \sum_{s = 0}^{+\infty} a_{k, s} \eta^s
+    \quad \text{and} \quad
+    b_k(\zeta) = 2^{1/3} \sum_{s = 0}^{+\infty} b_{k, s} \eta^s
+\]
+where \( \eta = 2^{-1/3} \zeta \).
+The way the sequences \( \plr{a_{k, s}}_{(k,s) \in \bbN^2} \) and \( \plr{b_{k, s}}_{(k,s) \in \bbN^2} \) can be computed is given in~\cite{Tem97}.
+But, we don't need to go far to have good accuracy and, in practice, we use the following expansions:
+\begin{align*}
+    a_0(\zeta) & = 1,
+    \\
+    a_1(\zeta) & = \frac{-1}{225}-\frac{71}{38500}\eta+\frac{82}{73125}\eta^2+\frac{5246}{3898125}\eta^3+\frac{185728}{478603125}\eta^4,
+    \\
+    a_2(\zeta) & = \frac{151439}{218295000}+\frac{68401}{147262500}\eta-\frac{1796498167}{4193689500000}\eta^2-\frac{583721053}{830718281250}\eta^3,
+    \\
+    a_3(\zeta) & = \frac{-887278009}{2504935125000}-\frac{3032321618951}{9708942993750000}\eta+\frac{14632757586911}{39373025737500000}\eta^2,
+    \\
+    b_0(\zeta) & = 2^{1/3} \left(\frac{1}{70}+\frac{2}{225}\eta+\frac{138}{67375}\eta^2-\frac{296}{511875}\eta^3-\frac{38464}{63669375}\eta^4-\dfrac{117472}{797671875}\eta^5 \right),
+    \\
+    b_1(\zeta) & = 2^{1/3} \left(\frac{-1213}{1023750}-\frac{3757}{2695000}\eta-\frac{3225661}{6700443750}\eta^2+\frac{90454643}{336992906250}\eta^3+\frac{48719944786}{142468185234375}\eta^4 \right),
+    \\
+    b_2(\zeta) & = 2^{1/3} \left(\frac{16542537833}{37743205500000}+\frac{115773498223}{162820783125000}\eta+\frac{548511920915149}{1721719224225000000}\eta^2-\frac{212557317961}{883884251250000}\eta^3 \right),
+    \\
+    b_3(\zeta) & = 2^{1/3} \left(\frac{-9597171184603}{25476663712500000}-\frac{430990563936859253}{568167343994250000000}\eta-\frac{3191320338955050557}{7777535495585625000000}\eta^2 \right).
+\end{align*}
+
+\bigskip
+
+The way we choose if we are near or far from the turning point to compute \( A_\nu(\zeta) \) and \( B_\nu(\zeta) \), is as follows: we check if the sequences \( \plr{a_k(\zeta)}_{k \in \bbN} \) and \( \plr{b_k(\zeta)}_{k \in \bbN} \) are decreasing and if they are, we use the first method, if they are not, we use the second method.
+
+
+%============================
+\section{How to use the toolbox}
+%============================
+
+It is governed by the CeCILL-C license under French law and abiding by the rules of distribution of free software.
+It can be used, modified and/or redistributed under the terms of the CeCILL-C license as circulated by CEA, CNRS and INRIA at the following URL: \url{http://www.cecill.info}.
+
+The toolbox contains the following Matlab scripts:
+\begin{itemize}
+    \item \verb|abk|: computes the sequences \( \plr{a_k(\zeta)}_{k \in \bbN} \) and \( \plr{b_k(\zeta)}_{k \in \bbN} \) when \( y \) is far from the turning point.
+
+    \item \verb|abktp|: computes the sequences \( (a_k(\zeta))_{k \in \bbN} \) and \( (b_k(\zeta))_{k \in \bbN} \) when \( y \) is near the turning point.
+
+    \item \verb|besselc|: computes all the Bessel and Hankel functions.
+
+          Usage \verb|[j,y,h1,h2] = besselc(nu, z)| for \( \nu \) and \( z \) complex or real numbers.
+
+    \item \verb|besselhc|: computes the Hankel functions.
+
+          Usage \verb|h = besselhc(nu, l, z)| for \( \nu \) and \( z \) complex or real numbers, \( l=1 \) for \( \hO \) and \( l=2 \) for \( \hT \).
+
+    \item \verb|besseljc|: computes the Bessel function of the first kind.
+
+          Usage \verb|j = besseljc(nu, z)| for \( \nu \) and \( z \) complex or real numbers.
+
+    \item \verb|besselyc|: computes the Bessel function of the second kind.
+
+          Usage \verb|y = besselyc(nu,z)| for \( \nu \) and \( z \) complex or real numbers.
+
+    \item \verb|debye|: computes the Debye polynomial sequence.
+
+    \item \verb|lambdamu|: computes the sequences \( \lambda \) and \( \mu \).
+\end{itemize}
+
+The reason I have one script that compute all of them is because, like you can see in \cref{expansion} for computing the two Bessel and Hankel functions we use the same \( A_\nu(\zeta) \) and \( B_\nu(\zeta) \).
+So if you need to compute all of them it faster to use the \texttt{besselc} script than calling the three other, but if you need only one of them it faster to call for example \texttt{besseljc} than \texttt{besselc}.
+
+Since we need to compute the Airy functions and we use the Matlab functions \texttt{airy} to do that, and since they can return \texttt{Inf} et \texttt{NaN}, my script can also return \texttt{Inf} and \texttt{NaN}.
+
+%============================
+\section{Numerical validation}
+%============================
+
+For numerical validation, we use Mathematica as a reference.
+The first test we did was to compare the values for 2000 random \( \nu = r_\nu \ex^{\im \theta_\nu} \) with \( r_\nu \in [400,40000] \), \( \theta_\nu \in \left[-\frac{\pi}{10^4},\frac{\pi}{10^4}\right] \) and for each value of \( \nu \) we took a random \( z_\nu \in [0.999 |\nu|, 1.001 |\nu|] \).
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.5]{err2000nuz.png}
+    \caption{In blue we have the 2000 \( \nu \) that we take and in red it is the \( z \).}
+\end{figure}
+For the 2000 couples \( (\nu,z_\nu) \) we computed the result of the two Bessel and Hankel functions with Mathematica and with my script, and we compute the relative error between them.
+The results are shown \cref{err2000}.
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}[h]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{err2000j.png}
+        \caption{Relative error of J}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{err2000y.png}
+        \caption{Relative error of Y}
+    \end{subfigure}
+
+    \begin{subfigure}[h]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{err2000h1.png}
+        \caption{Relative error of H1}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{err2000h2.png}
+        \caption{Relative error of H2}
+    \end{subfigure}
+    \caption{I plot the projection of \( (\Re(\nu),\Im(\nu),\text{relative error}) \) on the plan \( \Im(\nu)=0 \).}
+    \label{err2000}
+\end{figure}
+The maximum of the relative error is -7.707 in logarithmic scale. So we have 7 digits accurate but if we look in a smaller zone we can have more digits correct.
+We did a comparison in three other zone.
+
+\bigskip
+
+In zone 1 we have 1600 points with \( \Re(\nu) \in [395,405] \), \( \Im(\nu) \in [-10^{-5},-10^{-6}] \) and \( z = 414.93 \).
+The result are shown in figure \ref{err2}.
+The maximum of relative error is -10.634 in logarithmic scale.
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}[h]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{err2j.png}
+        \caption{Relative error of J in zone 1}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{err2y.png}
+        \caption{Relative error of Y in zone 1}
+    \end{subfigure}
+
+    \begin{subfigure}[h]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{err2h1.png}
+        \caption{Relative error of H1 in zone 1}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{err2h2.png}
+        \caption{Relative error of H2 in zone 1}
+    \end{subfigure}
+    \caption{The relative error of the Bessel and Hankel functions.}
+    \label{err2}
+\end{figure}
+
+\bigskip
+
+In zone 2 we have 1600 points with \( \Re(\nu) \in [3100,3200] \), \( \Im(\nu) \in [-0.7,0.5] \) and \( z = 3160.2 \).
+The results are shown in figure \ref{err3}.
+The maximum of relative error is -9.727 in logarithmic scale.
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}[h]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{err3j.png}
+        \caption{Relative error of J in zone 2}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{err3y.png}
+        \caption{Relative error of Y in zone 2}
+    \end{subfigure}
+
+    \begin{subfigure}[h]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{err3h1.png}
+        \caption{Relative error of H1 in zone 2}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{err3h2.png}
+        \caption{Relative error of H2 in zone 2}
+    \end{subfigure}
+    \caption{The relative error of the Bessel and Hankel functions.}
+    \label{err3}
+\end{figure}
+
+\bigskip
+
+In zone 3 we have 1600 points with \( \Re(\nu) \in [412.93,416.93] \), \( \Im(\nu) \in [-10^{-5},-10^{-6}] \) and \( z = 414.93 \).
+The resulte are shown in figure \ref{err4}.
+The maximum of relative error is -8.814 in logarithmic scale.
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}[h]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{err4j.png}
+        \caption{Relative error of J in zone 3}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{err4y.png}
+        \caption{Relative error of Y in zone 3}
+    \end{subfigure}
+
+    \begin{subfigure}[h]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{err4h1.png}
+        \caption{Relative error of H1 in zone 3}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{err4h2.png}
+        \caption{Relative error of H2 in zone 3}
+    \end{subfigure}
+    \caption{The relative error of the Bessel and Hankel functions.}
+    \label{err4}
+\end{figure}
+
+\bigskip
+
+To conclude, if \( |\nu| \ge 400 \) we have 7 digits correct and we can have more the greater \( |\nu| \) is and \( z \) not too close to \( \nu \).
+
+%== Bibliography ==========================================
+\bibliographystyle{abbrvurl}
+\bibliography{references}
+
+\end{document}
