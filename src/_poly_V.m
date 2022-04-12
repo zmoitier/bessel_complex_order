@@ -6,7 +6,7 @@
 ##
 
 function V = _poly_V(j_max)
-  U = _poly_U(j_max)
+  U = _poly_U(j_max);
   D0 = [-0.5, 0, 0.5, 0];
   D1 = [-1, 0, 1, 0, 0];
   
@@ -18,7 +18,7 @@ function V = _poly_V(j_max)
     V{2} = U{2} - D0;
   endif
   
-  for j=2:(j_max+1)
-    V{j+1} = U{j+1} - conv(D0, U{j}) - conv(D1, polyder(U{j}));
+  for j=3:(j_max+1)
+    V{j} = U{j} - conv(D0, U{j-1}) - conv(D1, polyder(U{j-1}));
   endfor
 endfunction

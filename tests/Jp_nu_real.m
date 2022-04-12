@@ -8,8 +8,8 @@ w = linspace(0.5, 1.5, N);
 [NU, W] = meshgrid(nu, w);
 Z = NU .* W;
 
-Jvz = besselc_J(NU, Z);
-ref = besselj(NU, Z);
+Jvz = besselc_Jp(NU, Z);
+ref = (besselj(NU .- 1, Z) .- besselj(NU .+ 1, Z)) ./ 2;
 err = abs(Jvz ./ ref .- 1);
 err(err <= 0) = 1e-16;
 

@@ -2,7 +2,7 @@
 
 ## usage: [phi] = _fct_phi(w, zeta)
 ##
-## Get the value of phi from w and zeta using (2.4) in [NIST:10.20(i)].
+## Return phi = (4*zeta / (1-w^2)) ^ (1/4).
 ##
 
 function [phi] = _fct_phi(w, zeta)

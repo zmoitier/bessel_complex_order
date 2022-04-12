@@ -1,4 +1,12 @@
-function Jvz = besselc_J(nu, z)
+## Author: Zoïs Moitier
+
+## usage: [Jvz] = besselc_J(nu, z)
+##
+## Compute the bessel function J based on uniform asymptotic expansions for large order
+## describe in [NIST:10.20].
+##
+
+function [Jvz] = besselc_J(nu, z)
   w = z ./ nu;
   zeta = _fct_zeta(w);
   phi = _fct_phi(w, zeta);
