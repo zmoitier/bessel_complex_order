@@ -2,7 +2,7 @@
 
 ## usage: [psi] = _fct_psi(w, zeta)
 ##
-## Return psi = ((1-w^2) / (4*zeta) ) ^ (1/4).
+## Return psi = 2 * ((1-w^2) / (4*zeta) ) ^ (1/4) / w.
 ##
 
 function [psi] = _fct_psi(w, zeta)
