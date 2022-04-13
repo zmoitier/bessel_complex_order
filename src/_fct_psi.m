@@ -6,9 +6,16 @@
 ##
 
 function [psi] = _fct_psi(w, zeta)
-  psi = 2 .* power((1 .- w .^ 2) ./ (4 .* zeta), 0.25) ./ w;
+  close_0 = abs(zeta) < 1e-5;
+  far_0 = ~close_0;
+  psi = zeros(size(zeta));
   
-  # w = 1
-  is_one = abs(w - 1) < 1e-14;
-  psi(is_one) = power(2, 2/3);
+  # zeta close to 0
+  psi(close_0) = polyval(
+    [5.142857142857142860e-1, 1.007936839915898530e+0, 1.587401051968199470e+0],
+    zeta(close_0)
+  );
+  
+  # zeta far form 0
+  psi(far_0) = 2 .* power((1 .- w(far_0) .^ 2) ./ (4 .* zeta(far_0)), 0.25) ./ w(far_0);
 endfunction
