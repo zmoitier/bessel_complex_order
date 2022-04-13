@@ -1,6 +1,6 @@
 ## Author: Zoïs Moitier
 
-## usage: [A, B] = _fct_AB(nu, w, zeta)
+## usage: [A, B] = _fct_AB(nu, w, zeta, k_max)
 ##
 ## Get the value for the function A_nu(zeta) and B_nu(zeta) used in [NIST:10.20.4-6].
 ##

@@ -24,13 +24,10 @@ hold on;
 h = pcolor(log10(NU), W, log10(err));
 set(h, 'EdgeColor', 'none');
 
-xlabel("\\nu", "fontsize", 16)
+xlabel("log_{10}(\\nu)", "fontsize", 16)
 ylabel("w", "fontsize", 16)
 axis tight;
 colorbar();
-
-plot([log10(nu(1)), log10(nu(N))], [wmin, wmin], "k")
-plot([log10(nu(1)), log10(nu(N))], [wmax, wmax], "k")
 
 title("log_{10} of the relative error for J_\\nu(\\nu w)", "fontsize", 16)
 
@@ -72,10 +69,6 @@ loglog(w, err(:, i1), "+--");
 
 [_ i2] = min(abs(nu .- 100));
 loglog(w, err(:, i2), "+--");
-
-ylims = ylim();
-loglog([wmin, wmin], [ylims(1), ylims(2)], "k")
-loglog([wmax, wmax], [ylims(1), ylims(2)], "k")
 
 xlabel("w", "fontsize", 16)
 ylabel("relative error", "fontsize", 16)

@@ -11,18 +11,13 @@ function [Jvz] = besselc_J(nu, z)
   zeta = _fct_zeta(w);
   phi = _fct_phi(w, zeta);
   
-  ##  z0 = abs(nu) < 20;
-  ##  nu50 = abs(nu) < 50;
-  ##  z1 = ~z0 & nu50;
-  ##  z2 = ~nu50;
-  ##  
-  ##  A = zeros(size(w));
-  ##  B = zeros(size(w));
-  ##  [A(z0), B(z0)] = _fct_AB(nu(z0), w(z0), zeta(z0), 4);
-  ##  [A(z1), B(z1)] = _fct_AB(nu(z1), w(z1), zeta(z1), 3);
-  ##  [A(z2), B(z2)] = _fct_AB(nu(z2), w(z2), zeta(z2), 2);
+  clo_tp = abs(zeta) < 0.1;
+  far_tp = ~clo_tp;
   
-  [A, B] = _fct_AB(nu, w, zeta, 5);
+  A = zeros(size(zeta));
+  B = zeros(size(zeta));
+  [A(clo_tp), B(clo_tp)] = _fct_AB_tp(nu(clo_tp), zeta(clo_tp));
+  [A(far_tp), B(far_tp)] = _fct_AB(nu(far_tp), w(far_tp), zeta(far_tp), 2);
   
   nu23z = power(nu, 2/3) .* zeta;
   Jvz = phi .* (
