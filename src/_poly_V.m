@@ -2,7 +2,7 @@
 
 ## usage: [V] = _poly_V(j_max)
 ##
-## Compute the polynoms V from 0 to j_max from (2.7) in [NIST:10.41.9].
+## Compute the polynoms V from 0 to j_max from (2.7) in [Temme:1997].
 ##
 
 function V = _poly_V(j_max)
@@ -16,9 +16,9 @@ function V = _poly_V(j_max)
   # recurrence
   if j_max >= 1
     V{2} = U{2} - D0;
-  endif
+  end
   
   for j=3:(j_max+1)
     V{j} = U{j} - conv(D0, U{j-1}) - conv(D1, polyder(U{j-1}));
-  endfor
-endfunction
+  end
+end

@@ -3,7 +3,7 @@
 from sympy import Poly, Rational
 
 
-def seq_uv(j_max):
+def seq_lambda_mu(j_max):
     """Sequences u and v."""
     u = [Rational(1)]
     v = [Rational(1)]

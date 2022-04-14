@@ -3,26 +3,31 @@ addpath("src/");
 hold on;
 
 N = 128;
-x = linspace(0, 2, N);
-y = linspace(-1, 1, N);
-[X, Y] = meshgrid(x, y);
-W = X .+ 1i .* Y;
+x = logspace(-16, 0, N);
 
-Z = _fct_zeta(W);
+t = 1; #exp(1i*pi/3)
+w0 = 1 .- x .* t;
+w2 = 1 .+ x .* t;
 
-zs1 = abs(Z) <= 1;
-zg1 = ~zs1;
+z0 = abs(_fct_zeta(w0));
+z2 = abs(_fct_zeta(w2));
 
-F = zeros(size(Z));
-F = sqrt(Z);
-#F(zg1) = (-1i) .* sqrt(-Z(zg1));
+loglog(x, z0)
+loglog(x, z2)
 
-subplot(1, 2, 1);
-im = pcolor(X, Y, real(F));
-set(im, 'EdgeColor', 'none');
-
-subplot(1, 2, 2);
-im = pcolor(X, Y, imag(F));
-set(im, 'EdgeColor', 'none');
+##N = 64;
+##x = linspace(-2e-8, 2e-8, N);
+##W = 1 .+ x + 1i .* x';
+##Z = _fct_zeta(W);
+##
+##subplot(1, 2, 1);
+##im = pcolor(x, x, real(Z));
+##set(im, 'EdgeColor', 'none');
+##colorbar();
+##
+##subplot(1, 2, 2);
+##im = pcolor(x, x, imag(Z));
+##set(im, 'EdgeColor', 'none');
+##colorbar();
 
 hold off;

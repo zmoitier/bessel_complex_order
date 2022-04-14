@@ -1,5 +1,7 @@
 """ Helper for printing """
 
+from sympy import Poly
+
 
 def num2str(num, prec=18):
     """num2str"""
@@ -12,6 +14,12 @@ def num2str(num, prec=18):
 def eval_coeffs(expr, var):
     """Eval coefficient of series."""
     if expr.is_number:
-        print([num2str(expr)])
+        print(num2str(expr))
+
+    elif isinstance(expr, Poly):
+        for c in expr.all_coeffs():
+            print(num2str(c))
+
     else:
-        print([num2str(expr.coeff(var, k)) for k in range(expr.getn())])
+        for k in reversed(range(expr.getn())):
+            print(num2str(expr.coeff(var, k)))

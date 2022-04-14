@@ -1,31 +1,33 @@
 clear;
 addpath("../src");
 
-N = 124;
+N = 123;
 nu = logspace(0, 2, N);
-w = linspace(0.5, 1.5, N);
+
+r = 0.5 .* linspace(-1, 1, N);
+w = 1 .+ r .* exp(1i * pi / 6);
 
 [NU, W] = meshgrid(nu, w);
 Z = NU .* W;
 
-Jvz = besselc_Jp(NU, Z);
-ref = (besselj(NU .- 1, Z) .- besselj(NU .+ 1, Z)) ./ 2;
+disp(besselc_J(99, 100 * exp(1i*0.1)) - besselc_J(101, 100 * exp(1i*0.1)));
+disp(besselj(99, 100 * exp(1i*0.1)) - besselj(101, 100 * exp(1i*0.1)));
+
+Jvz = besselc_J(NU .- 1, Z) .- besselc_J(NU .+ 1, Z);
+ref = besselj(NU .- 1, Z) .- besselj(NU .+ 1, Z);
 err = abs(Jvz ./ ref .- 1);
 err(err <= 0) = 1e-16;
-
-wmin = 0.95;
-wmax = 1.05;
 
 ############
 #### 2D plot
 figure(1);
 hold on;
 
-h = pcolor(log10(NU), W, log10(err));
+h = pcolor(log10(nu), r, log10(err));
 set(h, 'EdgeColor', 'none');
 
 xlabel("log_{10}(\\nu)", "fontsize", 16)
-ylabel("w", "fontsize", 16)
+ylabel("r", "fontsize", 16)
 axis tight;
 colorbar();
 
@@ -38,12 +40,12 @@ hold off;
 figure(2);
 hold on;
 
-w_vec = [0.9*wmin, wmin, 1, wmax, 1.1*wmax];
+r_vec = [-0.25, -0.05, 0, 0.05, 0.25];
 leg_name = {};
-for j = 1:length(w_vec)
-  [_ i] = min(abs(w .- w_vec(j)));
+for j = 1:length(r_vec)
+  [_ i] = min(abs(r .- r_vec(j)));
   loglog(nu, err(i, :), "+--");
-  leg_name{j} = ["w = ", num2str(w(i))];
+  leg_name{j} = ["r = ", num2str(r(i))];
 endfor
 
 xlabel("\\nu", "fontsize", 16);
@@ -62,15 +64,15 @@ figure(3);
 hold on;
 
 [_ i0] = min(abs(nu .- 1));
-loglog(w, err(:, i0), "+--");
+semilogy(r, err(:, i0), "+--");
 
 [_ i1] = min(abs(nu .- 10));
-loglog(w, err(:, i1), "+--");
+semilogy(r, err(:, i1), "+--");
 
 [_ i2] = min(abs(nu .- 100));
-loglog(w, err(:, i2), "+--");
+semilogy(r, err(:, i2), "+--");
 
-xlabel("w", "fontsize", 16)
+xlabel("r", "fontsize", 16)
 ylabel("relative error", "fontsize", 16)
 axis tight;
 grid on;
