@@ -1,6 +1,6 @@
-%% Alathor: Zoïs Moitier
+%% Author: Zoïs Moitier
 
-%% lasage: [la, mu] = _seq_lambda_mu(j_max)
+%% usage: [la, mu] = _seq_lambda_mu(j_max)
 %%
 %% Compute the sequences lambda and mu defined in (2.6) in [Temme:1997].
 %% 
@@ -10,7 +10,7 @@ function [la, mu] = _seq_lambda_mu(j_max)
   la = ones(j_max+1, 1);
   mu = ones(j_max+1, 1);
   
-  % reclarrence
+  % recurrence
   for s=1:j_max
     r = s + 1;
     la(r) = (6*s-5) * (6*s-1) * la(s) / (48*s);
