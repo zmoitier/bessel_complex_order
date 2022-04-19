@@ -2,7 +2,7 @@ clear;
 addpath("../src");
 
 N = 127;
-nu = logspace(0, 2, N);
+nu = 2 .* logspace(0, 2, N);
 
 r = 0.5 .* linspace(-1, 1, N);
 w = 1 .+ r .* exp(1i * pi / 6);
@@ -10,9 +10,10 @@ w = 1 .+ r .* exp(1i * pi / 6);
 [NU, W] = meshgrid(nu, w);
 Z = NU .* W;
 
-Jvz = besselc_J(NU, Z);
-ref = besselj(NU, Z);
-err = abs(Jvz ./ ref .- 1);
+F0 = (hankelc_2(NU .- 1, Z) .- hankelc_2(NU .+ 1, Z)) ./ 2;
+F1 = hankelc_2p(NU, Z);
+
+err = abs(F0 ./ F1 .- 1);
 err(err <= 1e-16) = 1e-16;
 
 %%%%%%%%%%%%
@@ -20,7 +21,7 @@ err(err <= 1e-16) = 1e-16;
 figure(1);
 hold on;
 
-h = pcolor(log10(nu), r, log10(err));
+h = pcolor(log10(abs(nu)), r, log10(err));
 set(h, 'EdgeColor', 'none');
 
 xlabel("log_{10}(\\nu)", "fontsize", 16)
@@ -28,7 +29,7 @@ ylabel("r", "fontsize", 16)
 axis tight;
 colorbar();
 
-title("log_{10} of the relative error for J_\\nu(\\nu w)", "fontsize", 16)
+title("log_{10} of the relative error for H^{(2)}_\\nu(\\nu w)", "fontsize", 16)
 
 hold off;
 
@@ -41,7 +42,7 @@ r_vec = [-0.25, -0.05, 0, 0.05, 0.25];
 leg_name = {};
 for j = 1:length(r_vec)
   [_ i] = min(abs(r .- r_vec(j)));
-  loglog(nu, err(i, :), "+--");
+  loglog(abs(nu), err(i, :), "+--");
   leg_name{j} = ["r = ", num2str(r(i))];
 endfor
 
@@ -51,7 +52,7 @@ axis tight;
 grid on;
 legend(leg_name, "fontsize", 16);
 
-title("log_{10} of the relative error for \\nu -> J_\\nu(\\nu w)", "fontsize", 16)
+title("log_{10} of the relative error for \\nu -> H^{(2)}_\\nu(\\nu w)", "fontsize", 16)
 
 hold off;
 
@@ -78,6 +79,6 @@ legend(
   "fontsize", 16
 )
 
-title("log_{10} of the relative error for w -> J_\\nu(\\nu w)", "fontsize", 16)
+title("log_{10} of the relative error for w -> H^{(2)}_\\nu(\\nu w)", "fontsize", 16)
 
 hold off;

@@ -2,22 +2,21 @@ clear;
 addpath("../src");
 
 N = 127;
-nu = 2 .* logspace(0, 2, N);
+nu = logspace(0, 2, N);
 
 r = 0.5 .* linspace(-1, 1, N);
-w = 1 .+ r .* exp(-1i * 1e-6);
+w = 1 .+ r .* exp(1i * pi / 6);
 
 [NU, W] = meshgrid(nu, w);
 Z = NU .* W;
 
-J0 = (besselc_J(NU .- 1, Z) .- besselc_J(NU .+ 1, Z)) ./ 2;
-J1 = besselc_Jp(NU, Z);
+Wron = hankelc_1(NU, Z) .* hankelc_2p(NU, Z) .- hankelc_1p(NU, Z) .* hankelc_2(NU, Z);
 
-err = abs(J0 ./ J1 .- 1);
+err = abs(Wron .* Z .* (-pi/(4i)) .- 1);
 err(err <= 1e-16) = 1e-16;
 
-############
-#### 2D plot
+%%%%%%%%%%%%
+%%%% 2D plot
 figure(1);
 hold on;
 
@@ -28,13 +27,14 @@ xlabel("log_{10}(\\nu)", "fontsize", 16)
 ylabel("r", "fontsize", 16)
 axis tight;
 colorbar();
+caxis ([-16 0]);
 
-title("log_{10} of the relative error for J_\\nu(\\nu w)", "fontsize", 16)
+title("log_{10} of the relative error for W(H^{(1)}_\\nu, H^{(2)}_\\nu)(\\nu w)", "fontsize", 16)
 
 hold off;
 
-#####################
-#### nu -> J_nu(nu w)
+%%%%%%%%%%%%%%%%%%%%%
+%%%% nu -> J_nu(nu w)
 figure(2);
 hold on;
 
@@ -52,12 +52,12 @@ axis tight;
 grid on;
 legend(leg_name, "fontsize", 16);
 
-title("log_{10} of the relative error for \\nu -> J_\\nu(\\nu w)", "fontsize", 16)
+title("log_{10} of the relative error for \\nu -> W(H^{(1)}_\\nu, H^{(2)}_\\nu)(\\nu w)", "fontsize", 16)
 
 hold off;
 
-####################
-#### w -> J_nu(nu w)
+%%%%%%%%%%%%%%%%%%%%
+%%%% w -> J_nu(nu w)
 figure(3);
 hold on;
 
@@ -79,6 +79,6 @@ legend(
   "fontsize", 16
 )
 
-title("log_{10} of the relative error for w -> J_\\nu(\\nu w)", "fontsize", 16)
+title("log_{10} of the relative error for w -> W(H^{(1)}_\\nu, H^{(2)}_\\nu)(\\nu w)", "fontsize", 16)
 
 hold off;

@@ -10,9 +10,9 @@ w = 1 .+ r .* exp(1i * pi / 6);
 [NU, W] = meshgrid(nu, w);
 Z = NU .* W;
 
-Jvz = besselc_J(NU, Z);
-ref = besselj(NU, Z);
-err = abs(Jvz ./ ref .- 1);
+Ypvz = besselc_Yp(NU, Z);
+ref = (bessely(NU .- 1, Z) .- bessely(NU .+ 1, Z)) ./ 2;
+err = abs(Ypvz ./ ref .- 1);
 err(err <= 1e-16) = 1e-16;
 
 %%%%%%%%%%%%
@@ -28,7 +28,7 @@ ylabel("r", "fontsize", 16)
 axis tight;
 colorbar();
 
-title("log_{10} of the relative error for J_\\nu(\\nu w)", "fontsize", 16)
+title("log_{10} of the relative error for Y_\\nu'(\\nu w)", "fontsize", 16)
 
 hold off;
 
@@ -51,7 +51,7 @@ axis tight;
 grid on;
 legend(leg_name, "fontsize", 16);
 
-title("log_{10} of the relative error for \\nu -> J_\\nu(\\nu w)", "fontsize", 16)
+title("log_{10} of the relative error for \\nu -> Y_\\nu'(\\nu w)", "fontsize", 16)
 
 hold off;
 
@@ -78,6 +78,6 @@ legend(
   "fontsize", 16
 )
 
-title("log_{10} of the relative error for w -> J_\\nu(\\nu w)", "fontsize", 16)
+title("log_{10} of the relative error for w -> Y_\\nu'(\\nu w)", "fontsize", 16)
 
 hold off;

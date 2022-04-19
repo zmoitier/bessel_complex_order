@@ -10,13 +10,13 @@ w = 1 .+ r .* exp(1i * pi / 6);
 [NU, W] = meshgrid(nu, w);
 Z = NU .* W;
 
-Jvz = besselc_Jp(NU, Z);
+Jpvz = besselc_Jp(NU, Z);
 ref = (besselj(NU .- 1, Z) .- besselj(NU .+ 1, Z)) ./ 2;
-err = abs(Jvz ./ ref .- 1);
+err = abs(Jpvz ./ ref .- 1);
 err(err <= 1e-16) = 1e-16;
 
-############
-#### 2D plot
+%%%%%%%%%%%%
+%%%% 2D plot
 figure(1);
 hold on;
 
@@ -28,12 +28,12 @@ ylabel("r", "fontsize", 16)
 axis tight;
 colorbar();
 
-title("log_{10} of the relative error for J_\\nu(\\nu w)", "fontsize", 16)
+title("log_{10} of the relative error for J_\\nu'(\\nu w)", "fontsize", 16)
 
 hold off;
 
-#####################
-#### nu -> J_nu(nu w)
+%%%%%%%%%%%%%%%%%%%%%
+%%%% nu -> J_nu(nu w)
 figure(2);
 hold on;
 
@@ -51,12 +51,12 @@ axis tight;
 grid on;
 legend(leg_name, "fontsize", 16);
 
-title("log_{10} of the relative error for \\nu -> J_\\nu(\\nu w)", "fontsize", 16)
+title("log_{10} of the relative error for \\nu -> J_\\nu'(\\nu w)", "fontsize", 16)
 
 hold off;
 
-####################
-#### w -> J_nu(nu w)
+%%%%%%%%%%%%%%%%%%%%
+%%%% w -> J_nu(nu w)
 figure(3);
 hold on;
 
@@ -78,6 +78,6 @@ legend(
   "fontsize", 16
 )
 
-title("log_{10} of the relative error for w -> J_\\nu(\\nu w)", "fontsize", 16)
+title("log_{10} of the relative error for w -> J_\\nu'(\\nu w)", "fontsize", 16)
 
 hold off;

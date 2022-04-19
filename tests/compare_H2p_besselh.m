@@ -2,7 +2,7 @@ clear;
 addpath("../src");
 
 N = 127;
-nu = logspace(0, 2, N);
+nu = 2 .* logspace(0, 2, N);
 
 r = 0.5 .* linspace(-1, 1, N);
 w = 1 .+ r .* exp(1i * pi / 6);
@@ -10,9 +10,9 @@ w = 1 .+ r .* exp(1i * pi / 6);
 [NU, W] = meshgrid(nu, w);
 Z = NU .* W;
 
-Jvz = besselc_J(NU, Z);
-ref = besselj(NU, Z);
-err = abs(Jvz ./ ref .- 1);
+H2vz = hankelc_2p(NU, Z);
+ref = (besselh(NU .- 1, 2, Z) .- besselh(NU .+ 1, 2, Z)) ./ 2;
+err = abs(H2vz ./ ref .- 1);
 err(err <= 1e-16) = 1e-16;
 
 %%%%%%%%%%%%
@@ -28,7 +28,7 @@ ylabel("r", "fontsize", 16)
 axis tight;
 colorbar();
 
-title("log_{10} of the relative error for J_\\nu(\\nu w)", "fontsize", 16)
+title("log_{10} of the relative error for H^{(2)}_\\nu'(\\nu w)", "fontsize", 16)
 
 hold off;
 
@@ -51,7 +51,7 @@ axis tight;
 grid on;
 legend(leg_name, "fontsize", 16);
 
-title("log_{10} of the relative error for \\nu -> J_\\nu(\\nu w)", "fontsize", 16)
+title("log_{10} of the relative error for \\nu -> H^{(2)}_\\nu'(\\nu w)", "fontsize", 16)
 
 hold off;
 
@@ -78,6 +78,6 @@ legend(
   "fontsize", 16
 )
 
-title("log_{10} of the relative error for w -> J_\\nu(\\nu w)", "fontsize", 16)
+title("log_{10} of the relative error for w -> H^{(2)}_\\nu'(\\nu w)", "fontsize", 16)
 
 hold off;

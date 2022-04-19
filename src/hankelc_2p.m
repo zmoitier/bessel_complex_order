@@ -1,9 +1,10 @@
 %% Author: Zoïs Moitier
 
-%% usage: [Jpvz] = besselc_Jp(nu, z)
+%% usage: [H2vzp] = hankelc_2p(nu, z)
 %%
-%% Compute the derivative of bessel function J' based on uniform asymptotic expansions
-%% for large order describe in (2.8) in [Temme:1997].
+%% Compute the bessel function H^(1) based on uniform asymptotic expansions for large
+%% order describe using the relation https://dlmf.nist.gov/9.2.E11 and in (2.8) in
+%% [Temme:1997].
 %% 
 %% [Temme:1997]
 %% N. Temme, Numerical algorithms for uniform Airy-type asymptotic expansions.
@@ -11,7 +12,7 @@
 %% https://doi.org/10.1023/A:1019197921337
 %%
 
-function [Jpvz] = besselc_Jp(nu, z)
+function [H2vzp] = hankelc_2p(nu, z)
   w = z ./ nu;
   zeta = _fct_zeta(w);
   
@@ -23,8 +24,9 @@ function [Jpvz] = besselc_Jp(nu, z)
   [C(clo_tp), D(clo_tp)] = _fct_CD_tp(nu(clo_tp), zeta(clo_tp), 3);
   [C(far_tp), D(far_tp)] = _fct_CD(nu(far_tp), w(far_tp), zeta(far_tp), 3);
   
-  nu23z = _fct_nu23zeta(nu, zeta);
-  Jpvz = -_fct_phi1(w, zeta) .* (
-      airy(0, nu23z) .* C .* power(nu, -4/3) .+ airy(1, nu23z) .* D .* power(nu, -2/3)
-    );
+  nu23z = power(nu, 2/3) .* zeta .* exp(-2i * pi / 3);
+  H2vzp = _fct_phi1(w, zeta) .* (
+    (2*exp(-2i * pi / 3)) .* airy(0, nu23z) .* C .* power(nu, -4/3) ...
+    .+ (2*exp(2i * pi / 3)) .* airy(1, nu23z) .* D .* power(nu, -2/3)
+  );
 end
