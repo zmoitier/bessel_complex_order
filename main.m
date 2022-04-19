@@ -1,33 +1,43 @@
 clear;
-addpath("src/");
-hold on;
+addpath("src");
+## hold on;
 
-N = 128;
-x = logspace(-16, 0, N);
+N = 3;
+nu = 2 .* logspace(0, 2, N);
 
-t = 1; #exp(1i*pi/3)
-w0 = 1 .- x .* t;
-w2 = 1 .+ x .* t;
+r = 0.5 .* linspace(-1, 1, N);
+w = 1 .+ r .* exp(1i * pi / 6);
 
-z0 = abs(_fct_zeta(w0));
-z2 = abs(_fct_zeta(w2));
+[NU, W] = meshgrid(nu, w);
+Z = NU .* W;
 
-loglog(x, z0)
-loglog(x, z2)
-
-##N = 64;
-##x = linspace(-2e-8, 2e-8, N);
-##W = 1 .+ x + 1i .* x';
-##Z = _fct_zeta(W);
+##disp(num2str(NU(62, end), "%.18f"))
+##disp(num2str(Z(62, end), "%.18f"))
 ##
-##subplot(1, 2, 1);
-##im = pcolor(x, x, real(Z));
-##set(im, 'EdgeColor', 'none');
-##colorbar();
+##J0 = (besselc_J(NU .- 1, Z) .- besselc_J(NU .+ 1, Z)) ./ 2;
+##J1 = besselc_Jp(NU, Z);
 ##
-##subplot(1, 2, 2);
-##im = pcolor(x, x, imag(Z));
-##set(im, 'EdgeColor', 'none');
-##colorbar();
+##disp(["J0 = ", num2str(J0(62, end), "%.18e")])
+##disp(["J1 = ", num2str(J1(62, end), "%.18e")])
 
-hold off;
+disp("")
+
+##disp("Matrix version")
+besselc_J(NU .- 1, Z)(2, end);
+##disp(besselc_J(NU .- 1, Z)(62, end))
+##disp(besselj(NU .- 1, Z)(62, end))
+
+##disp("Scalar version")
+besselc_J(NU(2, end) .- 1, Z(2, end));
+##disp(besselc_J(NU(62, end) .- 1, Z(62, end)))
+##disp(besselj(NU(62, end) .- 1, Z(62, end)))
+
+disp("")
+
+## hold off;
+
+
+airy(0, z, true) - airy(0, z) * exp(2/3 * z * sqrt(z))
+airy(1, z, true) - airy(1, z) * exp(2/3 * z * sqrt(z))
+airy(2, z, true) - airy(2, z) * exp(-abs(real(2/3 * z * sqrt(z))))
+airy(3, z, true) - airy(3, z) * exp(-abs(real(2/3 * z * sqrt(z))))

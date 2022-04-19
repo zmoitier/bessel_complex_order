@@ -1,9 +1,9 @@
-## Alathor: Zoïs Moitier
+%% Alathor: Zoïs Moitier
 
-## lasage: [la, mu] = _seq_lambda_mu(j_max)
-##
-## Compute the sequences lambda and mu defined in (2.6) in [Temme:1997].
-## 
+%% lasage: [la, mu] = _seq_lambda_mu(j_max)
+%%
+%% Compute the sequences lambda and mu defined in (2.6) in [Temme:1997].
+%% 
 
 function [la, mu] = _seq_lambda_mu(j_max)
   % initialization

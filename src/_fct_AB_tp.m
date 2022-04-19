@@ -1,11 +1,11 @@
-## Author: Zoïs Moitier
+%% Author: Zoïs Moitier
 
-## usage: [A, B] = _fct_AB_tp(nu, w, zeta, k_max)
-##
-## Get the value for the function A_nu(zeta) and B_nu(zeta) when zeta is close to 0
-## using Taylor expansion see Table 2 in [Temme:1997]. The computation of the
-## coefficients are done in the notebook `symbolic/comp_taylor_tp.ipynb`.
-##
+%% usage: [A, B] = _fct_AB_tp(nu, w, zeta, k_max)
+%%
+%% Get the value for the function A_nu(zeta) and B_nu(zeta) when zeta is close to 0
+%% using Taylor expansion see Table 2 in [Temme:1997]. The computation of the
+%% coefficients are done in the notebook `symbolic/comp_taylor_tp.ipynb`.
+%%
 
 function [A, B] = _fct_AB_tp(nu, zeta, k_max)
   A_poly = {

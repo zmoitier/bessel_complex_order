@@ -1,10 +1,10 @@
-## Author: Zoïs Moitier
+%% Author: Zoïs Moitier
 
-## usage: [C, D] = _fct_CD(nu, w, zeta, k_max)
-##
-## Get the value for the functions C_nu(zeta) and D_nu(zeta) see (2.10) and (2.12) in
-## [Temme:1997]. This is numericaly stable if zeta is not to close of 0.
-##
+%% usage: [C, D] = _fct_CD(nu, w, zeta, k_max)
+%%
+%% Get the value for the functions C_nu(zeta) and D_nu(zeta) see (2.10) and (2.12) in
+%% [Temme:1997]. This is numericaly stable if zeta is not to close of 0.
+%%
 
 function [C, D] = _fct_CD(nu, w, zeta, k_max)
   [la, mu] = _seq_lambda_mu(2*k_max+1);

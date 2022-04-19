@@ -1,26 +1,27 @@
 clear;
 addpath("../src");
 
-N = 123;
+N = 127;
 nu = 2 .* logspace(0, 2, N);
 
 r = 0.5 .* linspace(-1, 1, N);
-w = 1 .+ r .* exp(1i * 0.001);
+w = 1 .+ r .* exp(-1i * 1e-6);
 
 [NU, W] = meshgrid(nu, w);
 Z = NU .* W;
 
 J0 = (besselc_J(NU .- 1, Z) .- besselc_J(NU .+ 1, Z)) ./ 2;
 J1 = besselc_Jp(NU, Z);
+
 err = abs(J0 ./ J1 .- 1);
-err(err <= 0) = 1e-16;
+err(err <= 1e-16) = 1e-16;
 
 ############
 #### 2D plot
 figure(1);
 hold on;
 
-h = pcolor(log10(nu), r, log10(err));
+h = pcolor(log10(abs(nu)), r, log10(err));
 set(h, 'EdgeColor', 'none');
 
 xlabel("log_{10}(\\nu)", "fontsize", 16)
@@ -41,7 +42,7 @@ r_vec = [-0.25, -0.05, 0, 0.05, 0.25];
 leg_name = {};
 for j = 1:length(r_vec)
   [_ i] = min(abs(r .- r_vec(j)));
-  loglog(nu, err(i, :), "+--");
+  loglog(abs(nu), err(i, :), "+--");
   leg_name{j} = ["r = ", num2str(r(i))];
 endfor
 

@@ -1,11 +1,11 @@
-## Author: Zoïs Moitier
+%% Author: Zoïs Moitier
 
-## usage: [C, D] = _fct_CD_tp(nu, w, zeta, k_max)
-##
-## Get the value for the function C_nu(zeta) and D_nu(zeta) when zeta is close to 0
-## using Taylor expansion as in Table 2 in [Temme:1997]. The computation of the
-## coefficients are done in the notebook `symbolic/comp_taylor_tp.ipynb`.
-##
+%% usage: [C, D] = _fct_CD_tp(nu, w, zeta, k_max)
+%%
+%% Get the value for the function C_nu(zeta) and D_nu(zeta) when zeta is close to 0
+%% using Taylor expansion as in Table 2 in [Temme:1997]. The computation of the
+%% coefficients are done in the notebook `symbolic/comp_taylor_tp.ipynb`.
+%%
 
 function [C, D] = _fct_CD_tp(nu, zeta, k_max)
   C_poly = {

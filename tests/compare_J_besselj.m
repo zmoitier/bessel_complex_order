@@ -1,7 +1,7 @@
 clear;
 addpath("../src");
 
-N = 123;
+N = 127;
 nu = logspace(0, 2, N);
 
 r = 0.5 .* linspace(-1, 1, N);
@@ -10,13 +10,10 @@ w = 1 .+ r .* exp(1i * pi / 6);
 [NU, W] = meshgrid(nu, w);
 Z = NU .* W;
 
-disp(besselc_J(99, 100 * exp(1i*0.1)) - besselc_J(101, 100 * exp(1i*0.1)));
-disp(besselj(99, 100 * exp(1i*0.1)) - besselj(101, 100 * exp(1i*0.1)));
-
-Jvz = besselc_J(NU .- 1, Z) .- besselc_J(NU .+ 1, Z);
-ref = besselj(NU .- 1, Z) .- besselj(NU .+ 1, Z);
+Jvz = besselc_J(NU, Z);
+ref = besselj(NU, Z);
 err = abs(Jvz ./ ref .- 1);
-err(err <= 0) = 1e-16;
+err(err <= 1e-16) = 1e-16;
 
 ############
 #### 2D plot
