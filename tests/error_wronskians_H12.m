@@ -10,7 +10,12 @@ w = 1 .+ r .* exp(1i * pi / 6);
 [NU, W] = meshgrid(nu, w);
 Z = NU .* W;
 
-Wron = hankelc_1(NU, Z) .* hankelc_2p(NU, Z) .- hankelc_1p(NU, Z) .* hankelc_2(NU, Z);
+H10 = hankelc_1(NU, Z);
+H11 = hankelc_1p(NU, Z);
+H20 = hankelc_2(NU, Z);
+H21 = hankelc_2p(NU, Z);
+
+Wron = (H21 ./ H20 .- H11 ./ H10) .* H20 .* H10;
 
 err = abs(Wron .* Z .* (-pi/(4i)) .- 1);
 err(err <= 1e-16) = 1e-16;

@@ -25,6 +25,6 @@ function [Ypvz] = besselc_Yp(nu, z)
   
   nu23z = power(nu, 2/3) .* zeta;
   Ypvz = _fct_phi1(w, zeta) .* (
-      airy(2, nu23z) .* C .* power(nu, -4/3) .+ airy(3, nu23z) .* D .* power(nu, -2/3)
-    );
+    airy(2, nu23z) .* C .* power(nu, -4/3) .+ airy(3, nu23z) .* D .* power(nu, -2/3)
+  );
 end

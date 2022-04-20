@@ -10,7 +10,12 @@ w = 1 .+ r .* exp(1i * pi / 6);
 [NU, W] = meshgrid(nu, w);
 Z = NU .* W;
 
-Wron = besselc_J(NU, Z) .* besselc_Yp(NU, Z) .- besselc_Jp(NU, Z) .* besselc_Y(NU, Z);
+J0 = besselc_J(NU, Z);
+J1 = besselc_Jp(NU, Z);
+Y0 = besselc_Y(NU, Z);
+Y1 = besselc_Yp(NU, Z);
+
+Wron = (Y1 ./ Y0 .- J1 ./ J0) .* J0 .* Y0;
 
 err = abs(Wron .* Z .* (pi/2) .- 1);
 err(err <= 1e-16) = 1e-16;
