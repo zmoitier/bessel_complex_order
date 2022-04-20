@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/477078224.svg)](https://zenodo.org/badge/latestdoi/477078224)
+
 # bessel_complex_order
 
 A Matlab/Octave toolbox to compute Bessel and Hankel function with large complex order.
