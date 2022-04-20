@@ -530,5 +530,3 @@ cython_debug/
 #.idea/
 
 # End of https://www.toptal.com/developers/gitignore/api/latex,octave,matlab,python,jupyternotebooks
-
-doc/1997_Temme.pdf
