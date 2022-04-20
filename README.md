@@ -1,6 +1,9 @@
 # bessel_complex_order
 
-> https://fr.mathworks.com/matlabcentral/fileexchange/9515-bessel-function-of-complex-order-and-argument
+A Matlab/Octave toolbox to compute Bessel and Hankel function with large complex order.
 
-> https://www.johndcook.com/blog/2020/01/17/stable-recurrence-relations/
+[Documentation](doc/documentation.pdf)
 
+## Contact
+
+If you have any questions or suggestions please feel free to create [an issue in this repository](https://github.com/zmoitier/bessel_complex_order/issues/new).

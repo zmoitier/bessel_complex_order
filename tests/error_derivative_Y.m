@@ -10,8 +10,8 @@ w = 1 .+ r .* exp(1i * pi / 6);
 [NU, W] = meshgrid(nu, w);
 Z = NU .* W;
 
-Y0 = (besselc_Y(NU .- 1, Z) .- besselc_Y(NU .+ 1, Z)) ./ 2;
-Y1 = besselc_Yp(NU, Z);
+Y0 = (bessely_cplx(NU .- 1, Z) .- bessely_cplx(NU .+ 1, Z)) ./ 2;
+Y1 = besselyp_cplx(NU, Z);
 
 err = abs(Y0 ./ Y1 .- 1);
 err(err <= 1e-16) = 1e-16;
@@ -74,10 +74,11 @@ xlabel("r", "fontsize", 16)
 ylabel("relative error", "fontsize", 16)
 axis tight;
 grid on;
-legend(
-  {["\\nu = ", num2str(nu(i0))], ["\\nu = ", num2str(nu(i1))], ["\\nu = ", num2str(nu(i2))]},
-  "fontsize", 16
-)
+legend({[
+  "\\nu = ", num2str(nu(i0))],
+  ["\\nu = ", num2str(nu(i1))],
+  ["\\nu = ", num2str(nu(i2))]
+}, "fontsize", 16)
 
 title("log_{10} of the relative error for w -> J_\\nu(\\nu w)", "fontsize", 16)
 

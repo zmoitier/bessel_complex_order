@@ -1,27 +1,27 @@
 clear;
 addpath("../src");
 
-nu = 100 * exp(-1i * pi / 6);
+z = 100;
 
 N = 127;
-x = real(nu) .+ linspace(-25, 25, N);
-y = imag(nu) .+ linspace(-25, 25, N);
+x = real(z) .+ linspace(-25, 25, N);
+y = imag(z) .+ linspace(-25, 25, N);
 [X, Y] = meshgrid(x, y);
-Z = X .+ 1i .* Y;
+NU = X .+ 1i .* Y;
 
-J0 = besselj_cplx(nu, Z);
-J1 = besseljp_cplx(nu, Z);
-Y0 = bessely_cplx(nu, Z);
-Y1 = besselyp_cplx(nu, Z);
+J0 = besselj_cplx(NU, z);
+J1 = besseljp_cplx(NU, z);
+Y0 = bessely_cplx(NU, z);
+Y1 = besselyp_cplx(NU, z);
 WB = (Y1 ./ Y0 .- J1 ./ J0) .* J0 .* Y0;
-eB = abs(WB .* Z .* (pi/2) .- 1);
+eB = abs(WB .* z .* (pi/2) .- 1);
 
-H10 = besselh_cplx(nu, 1, Z);
-H11 = besselhp_cplx(nu, 1, Z);
-H20 = besselh_cplx(nu, 2, Z);
-H21 = besselhp_cplx(nu, 2, Z);
+H10 = besselh_cplx(NU, 1, z);
+H11 = besselhp_cplx(NU, 1, z);
+H20 = besselh_cplx(NU, 2, z);
+H21 = besselhp_cplx(NU, 2, z);
 WH = (H21 ./ H20 .- H11 ./ H10) .* H20 .* H10;
-eH = abs(WH .* Z .* (-pi/(4i)) .- 1);
+eH = abs(WH .* z .* (-pi/(4i)) .- 1);
 
 figure(1);
 
@@ -29,8 +29,8 @@ subplot(1, 2, 1);
 h = pcolor(x, y, log10(eB));
 set(h, 'EdgeColor', 'none');
 
-xlabel("\\Re(z)", "fontsize", 16)
-ylabel("\\Im(z)", "fontsize", 16)
+xlabel("\\Re(\\nu)", "fontsize", 16)
+ylabel("\\Im(\\nu)", "fontsize", 16)
 axis tight;
 colorbar();
 caxis ([-16 0]);
@@ -41,8 +41,8 @@ subplot(1, 2, 2);
 h = pcolor(x, y, log10(eH));
 set(h, 'EdgeColor', 'none');
 
-xlabel("\\Re(z)", "fontsize", 16)
-ylabel("\\Im(z)", "fontsize", 16)
+xlabel("\\Re(\\nu)", "fontsize", 16)
+ylabel("\\Im(\\nu)", "fontsize", 16)
 axis tight;
 colorbar();
 caxis ([-16 0]);

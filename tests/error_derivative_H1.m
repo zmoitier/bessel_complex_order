@@ -10,8 +10,8 @@ w = 1 .+ r .* exp(1i * pi / 6);
 [NU, W] = meshgrid(nu, w);
 Z = NU .* W;
 
-F0 = (hankelc_1(NU .- 1, Z) .- hankelc_1(NU .+ 1, Z)) ./ 2;
-F1 = hankelc_1p(NU, Z);
+F0 = (besselh_cplx(NU .- 1, 1, Z) .- besselh_cplx(NU .+ 1, 1, Z)) ./ 2;
+F1 = besselhp_cplx(NU, 1, Z);
 
 err = abs(F0 ./ F1 .- 1);
 err(err <= 1e-16) = 1e-16;
@@ -74,10 +74,11 @@ xlabel("r", "fontsize", 16)
 ylabel("relative error", "fontsize", 16)
 axis tight;
 grid on;
-legend(
-  {["\\nu = ", num2str(nu(i0))], ["\\nu = ", num2str(nu(i1))], ["\\nu = ", num2str(nu(i2))]},
-  "fontsize", 16
-)
+legend({[
+  "\\nu = ", num2str(nu(i0))],
+  ["\\nu = ", num2str(nu(i1))],
+  ["\\nu = ", num2str(nu(i2))]
+}, "fontsize", 16)
 
 title("log_{10} of the relative error for w -> H^{(1)}_\\nu(\\nu w)", "fontsize", 16)
 
