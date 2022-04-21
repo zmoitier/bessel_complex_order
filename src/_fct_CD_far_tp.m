@@ -33,7 +33,7 @@ function [C, D] = _fct_CD_far_tp(nu, w, zeta, k_max)
     C = _coef_C(p, zeta32, mu, V, k) .+ inv_nu2 .* C;
     D = _coef_D(p, zeta32, la, V, k) .+ inv_nu2 .* D;
   end
-  C .*= -zeta12;
+  C = -zeta12 .* C;
 end
 
 function [Ck] = _coef_C(p, zeta32, mu, V, k)

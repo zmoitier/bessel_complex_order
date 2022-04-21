@@ -21,7 +21,7 @@ function [Jvz] = besselj_cplx(nu, z)
   
   nu23z = _fct_nu23zeta(nu, zeta);
   [A, B] = _fct_AB(nu, w, zeta, 3);
-  Jvz = _fct_phi0(w, zeta) .* (
-    airy(1, nu23z) .* B .* power(nu, -5/3) .+ airy(0, nu23z) .* A .* power(nu, -1/3)
+  Jvz = _fct_phi0(w, zeta) .* (...
+    airy(1, nu23z) .* B .* power(nu, -5/3) .+ airy(0, nu23z) .* A .* power(nu, -1/3)...
   );
 end

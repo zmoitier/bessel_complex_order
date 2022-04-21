@@ -33,7 +33,7 @@ function [A, B] = _fct_AB_far_tp(nu, w, zeta, k_max)
     A = _coef_a(p, zeta32, mu, U, k) .+ inv_nu2 .* A;
     B = _coef_b(p, zeta32, la, U, k) .+ inv_nu2 .* B;
   end
-  B .*= -zeta12;
+  B = -zeta12 .* B;
 end
 
 function [Ak] = _coef_a(p, zeta32, mu, U, k)

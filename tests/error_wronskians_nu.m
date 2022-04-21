@@ -1,11 +1,11 @@
 clear;
 addpath("../src");
 
-z = 100;
+z = 400;
 
 N = 127;
-x = real(z) .+ linspace(-25, 25, N);
-y = imag(z) .+ linspace(-25, 25, N);
+x = real(z) .+ linspace(-20, 20, N);
+y = imag(z) .+ linspace(-20, 20, N);
 [X, Y] = meshgrid(x, y);
 NU = X .+ 1i .* Y;
 

@@ -34,8 +34,8 @@ function [Hvz] = besselh_cplx(nu, k, z)
   end
   
   [A, B] = _fct_AB(nu, w, zeta, 3);
-  Hvz = _fct_phi0(w, zeta) .* (
+  Hvz = _fct_phi0(w, zeta) .* (...
     b1 .* airy(1, nu23z) .* B .* power(nu, -5/3) ...
-    .+ a0 .* airy(0, nu23z) .* A .* power(nu, -1/3)
+    .+ a0 .* airy(0, nu23z) .* A .* power(nu, -1/3)...
   );
 end

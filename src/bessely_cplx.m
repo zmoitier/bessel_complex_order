@@ -21,7 +21,7 @@ function [Yvz] = bessely_cplx(nu, z)
   
   nu23z = power(nu, 2/3) .* zeta;
   [A, B] = _fct_AB(nu, w, zeta, 3);
-  Yvz = -_fct_phi0(w, zeta) .* (
-    airy(3, nu23z) .* B .* power(nu, -5/3) .+ airy(2, nu23z) .* A .* power(nu, -1/3)
+  Yvz = -_fct_phi0(w, zeta) .* (...
+    airy(3, nu23z) .* B .* power(nu, -5/3) .+ airy(2, nu23z) .* A .* power(nu, -1/3)...
   );
 end
